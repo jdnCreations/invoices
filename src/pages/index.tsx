@@ -4,6 +4,8 @@ import Link from "next/link";
 import { api } from "~/utils/api";
 
 export default function Home() {
+  const users = api.user.getAll.useQuery();
+
   return (
     <>
       <Head>
@@ -12,6 +14,9 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
+        {users.data?.map((user) => (
+          <p key={user.id}>{user.name}</p>
+        ))}
         <h1>Hello.</h1>
       </main>
     </>
