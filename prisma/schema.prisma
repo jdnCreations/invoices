@@ -11,10 +11,16 @@ datasource db {
   relationMode = "prisma"
 }
 
-model Example {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Invoice {
+  id      String   @id
+  dueDate DateTime
+  person  String
+  amount  Float
+  status  String
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String
+
+  @@index([userId])
 }
 
 // Necessary for Next auth
@@ -55,6 +61,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  invoices      Invoice[]
 }
 
 model VerificationToken {
