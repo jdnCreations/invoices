@@ -15,40 +15,115 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="flex min-h-screen bg-light">
-        <header className="rounded-r-[20px] bg-blue-400">
-          <div className="relative flex h-[6.4375rem] w-[6.4375rem] items-center justify-center rounded-r-2xl bg-purple-300">
+      <div className="flex min-h-screen flex-col bg-light md:flex-row">
+        <header className="flex h-[4.5rem] items-center justify-between bg-04 md:h-screen md:flex-col md:rounded-r-[20px]">
+          <div className="relative flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-r-2xl bg-01 md:h-[6.4375rem] md:w-[6.4375rem]">
             <Image
-              className="relative z-10"
+              className="relative z-10 w-[28px] md:w-[40px]"
               alt="logo"
               src="/images/logo.svg"
               width={40}
               height={40}
             />
-            <div className="absolute bottom-0 h-[3.21875rem] w-full rounded-br-2xl rounded-tl-2xl bg-purple-200"></div>
+            <div className="absolute bottom-0 h-[2.25rem] w-full rounded-br-2xl rounded-tl-2xl bg-02 md:h-[3.21875rem]"></div>
+          </div>
+          <div className="flex h-[4.5rem] items-center justify-between gap-8 px-8 md:flex-col">
+            <Image
+              alt="mode icon"
+              src="/images/icon-moon.svg"
+              width={19.9}
+              height={19.9}
+            />
+            <div className="h-full w-[1px] bg-[#494e6e] md:h-[1px] md:w-full"></div>
+            <Image
+              alt="profile picture"
+              src="/images/image-avatar.jpg"
+              width={32}
+              height={32}
+              className="rounded-full"
+            />
           </div>
         </header>
-        <main className="flex w-full items-center justify-center bg-light">
-          <div className="flex max-w-[45.625rem]">
-            <div>
-              <h1>Invoices</h1>
-              <p>There are 7 total invoices</p>
-            </div>
-            <label htmlFor="">Filter by status</label>
-            <select name="filter" id="filter"></select>
-            <button className="flex h-[3rem] w-[9.375rem] items-center justify-center rounded-full bg-purple-300 text-white">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white">
-                <Image
-                  alt="plus"
-                  src="/images/icon-plus.svg"
-                  width={11}
-                  height={11}
-                  className="object-center"
-                />
+        <main className="flex w-full flex-col items-center justify-center bg-light py-4 font-spartan">
+          <div className="flex w-[calc(100%-1.5rem)] max-w-[45.625rem] py-4">
+            <div className="flex w-full items-center justify-between px-2">
+              <div>
+                <h1 className="text-heading-m font-bold leading-heading-m tracking-heading-m">
+                  Invoices
+                </h1>
+                <p className="text-06">7 invoices</p>
               </div>
-              New Invoice
-            </button>
+              <div className="flex items-center gap-3">
+                <label
+                  className="text-heading-s font-bold leading-body-var tracking-heading-s"
+                  htmlFor=""
+                >
+                  Filter
+                </label>
+                <select name="filter" id="filter"></select>
+                <button className="flex h-[3rem] w-auto items-center justify-between gap-2 rounded-full bg-01 px-2 text-white md:w-[9.375rem]">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white">
+                    <Image
+                      alt="plus"
+                      src="/images/icon-plus.svg"
+                      width={11}
+                      height={11}
+                      className="object-center"
+                    />
+                  </div>
+                  New
+                </button>
+              </div>
+            </div>
           </div>
+
+          {/* INVOICE */}
+          <div className="flex w-[calc(100%-1.5rem)] flex-col gap-3 md:max-w-[45.625rem]">
+            <div className="grid grid-cols-2 grid-rows-4 items-center rounded-md bg-white px-[1.5rem] py-4 font-medium shadow md:grid-cols-5 md:grid-rows-1">
+              <p className="order-first text-heading-s font-bold leading-heading-s-var tracking-heading-s text-08">
+                <span className="text-07">#</span>RT3080
+              </p>
+              <p className="col-start-1 row-start-3 text-body text-07 md:col-start-2">
+                <span className="text-06">Due</span> 19 Aug 2021
+              </p>
+              <p className="col-start-2 row-start-1 place-self-end text-body text-06 md:col-start-3 md:place-self-auto">
+                Jensen Huang
+              </p>
+              <p className="col-start-1 row-start-4 text-heading-s font-bold md:col-start-4">
+                $1800.90
+              </p>
+              <div className="col-start-2 row-span-2 row-start-3 flex h-[2.5rem] w-[6.5rem] items-center justify-center gap-2 place-self-end rounded bg-accent-green/20 md:col-start-5 md:row-span-1 md:self-auto">
+                <div className="h-2 w-2 rounded-full bg-accent-green"></div>
+                <p className="leading-none text-heading-s font-bold text-accent-green">
+                  Paid
+                </p>
+              </div>
+            </div>
+            {/* <div className="flex flex-col items-center rounded-md bg-white px-4 py-4 font-medium shadow md:flex-row">
+              <div className="flex w-full items-center justify-between">
+                <p className="order-first text-heading-s font-bold leading-heading-s-var tracking-heading-s text-08">
+                  <span className="text-07">#</span>RT3080
+                </p>
+                <p className="text-body text-06 md:order-3">Jensen Huang</p>
+              </div>
+
+              <div className="flex w-full items-center justify-between">
+                <div className="flex">
+                  <p className="text-body text-07">
+                    <span className="text-06">Due</span> 19 Aug 2021
+                  </p>
+                  <p className="text-heading-s font-bold">$1800.90</p>
+                </div>
+                <div className="flex h-[2.5rem] w-[6.5rem] items-center justify-center gap-2 rounded bg-accent-green/20">
+                  <div className="h-2 w-2 rounded-full bg-accent-green"></div>
+                  <p className="leading-none text-heading-s font-bold text-accent-green">
+                    Paid
+                  </p>
+                </div>
+              </div>
+            </div> */}
+          </div>
+          {/* END INVOICE */}
         </main>
       </div>
     </>
