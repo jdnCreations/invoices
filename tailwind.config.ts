@@ -40,9 +40,9 @@ export default {
       "body-var": "0.9375rem",
     },
     letterSpacing: {
-      "heading-l": "-1",
-      "heading-m": "-0.75",
-      "heading-s": "-0.25",
+      "heading-l": "-0.07031rem",
+      "heading-m": "-0.04688rem",
+      "heading-s": "-0.01563rem",
     },
   },
   plugins: [],
