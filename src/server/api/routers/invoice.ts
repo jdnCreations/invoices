@@ -6,19 +6,15 @@ import {
 } from "~/server/api/trpc";
 
 export const invoiceRouter = createTRPCRouter({
-  hello: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .query(({ input }) => {
-      return {
-        greeting: `Hello ${input.text}`,
-      };
-    }),
-
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.invoice.findMany();
   }),
 
-  getSecretMessage: protectedProcedure.query(() => {
-    return "you can now see this secret message!";
+  getById: publicProcedure.input(z.string()).query(({ ctx, input }) => {
+    return ctx.prisma.invoice.findFirst({
+      where: {
+        id: input,
+      },
+    });
   }),
 });

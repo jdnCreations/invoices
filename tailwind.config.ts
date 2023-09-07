@@ -24,6 +24,7 @@ export default {
       "12": "rgb(20,22,37)",
       "accent-green": "#33D69F",
       "accent-orange": "#FF8F00",
+      "accent-gray": "#373B53",
     },
     fontSize: {
       "heading-l": "2.25rem",
