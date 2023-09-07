@@ -2,12 +2,12 @@ import type { Invoice } from "@prisma/client";
 import Link from "next/link";
 import StatusIndicator from "./StatusIndicator";
 
-export default function Invoice(props: { invoice: Invoice }) {
-  const currency = new Intl.NumberFormat("en-AU", {
-    style: "currency",
-    currency: "AUD",
-  });
+export const currency = new Intl.NumberFormat("en-AU", {
+  style: "currency",
+  currency: "AUD",
+});
 
+export default function Invoice(props: { invoice: Invoice }) {
   return (
     <Link
       href={`/view/${props.invoice.id}`}
