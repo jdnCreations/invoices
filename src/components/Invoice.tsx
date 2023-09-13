@@ -1,13 +1,22 @@
-import type { Invoice } from "@prisma/client";
+import type { Invoice, Person } from "@prisma/client";
 import Link from "next/link";
 import StatusIndicator from "./StatusIndicator";
+import { format } from "path";
 
 export const currency = new Intl.NumberFormat("en-AU", {
   style: "currency",
   currency: "AUD",
 });
 
-export default function Invoice(props: { invoice: Invoice }) {
+export const formatDate = (date: Date) => {
+  return date.toLocaleDateString("en-AU", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+};
+
+export default function Invoice(props: { invoice: Invoice; person: Person }) {
   return (
     <Link
       href={`/view/${props.invoice.id}`}
@@ -20,14 +29,10 @@ export default function Invoice(props: { invoice: Invoice }) {
         </p>
         <p className="col-start-1 row-start-3 text-body leading-body text-07 md:col-start-2 md:row-start-1">
           <span className="text-06">Due</span>{" "}
-          {`${props.invoice.dueDate.toLocaleDateString("en-AU", {
-            day: "numeric",
-            month: "short",
-            year: "numeric",
-          })}`}
+          {formatDate(props.invoice.dueDate)}
         </p>
         <p className="col-start-2 row-start-1 place-self-end text-body leading-body text-06 md:col-start-3 md:place-self-auto">
-          {props.invoice.person}
+          {props.person.name}
         </p>
         <p className="col-start-1 row-start-4 text-heading-s font-bold leading-heading-s tracking-heading-s md:col-start-4 md:row-start-1">
           {currency.format(props.invoice.amount)}

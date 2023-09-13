@@ -1,11 +1,9 @@
-import type { Invoice } from "@prisma/client";
-
-export default function StatusIndicator(props: { invoice: Invoice }) {
+export default function StatusIndicator(props: { status: string }) {
   let accentText = "";
   let accentBackground = "";
   let fadedBackground = "";
 
-  switch (props.invoice.status.toLowerCase()) {
+  switch (props.status.toLowerCase()) {
     case "paid":
       accentText = "text-accent-green";
       accentBackground = "bg-accent-green";
@@ -30,7 +28,7 @@ export default function StatusIndicator(props: { invoice: Invoice }) {
       <p
         className={`text-heading-s font-bold leading-heading-s-var tracking-heading-s ${accentText}`}
       >
-        {props.invoice.status}
+        {props.status}
       </p>
     </div>
   );

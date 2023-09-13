@@ -7,16 +7,21 @@ await import("./src/env.mjs");
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
-
-  /**
-   * If you are using `appDir` then you must comment the below `i18n` config out.
-   *
-   * @see https://github.com/vercel/next.js/issues/41980
-   */
   i18n: {
     locales: ["en"],
     defaultLocale: "en",
   },
+  images: {
+    domains: ["avatars.githubusercontent.com"],
+  },
 };
 
-export default config;
+const object = {
+  env: {
+    GITHUB_ID: process.env.GITHUB_CLIENT_ID,
+    GITHUB_SECRET: process.env.GITHUB_CLIENT_SECRET,
+  },
+  ...config,
+};
+
+export default object;

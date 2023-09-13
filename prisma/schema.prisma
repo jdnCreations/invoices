@@ -12,15 +12,43 @@ datasource db {
 }
 
 model Invoice {
-  id      String   @id
-  dueDate DateTime
-  person  String
-  amount  Float
-  status  String
-  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId  String
+  id         String   @id
+  dueDate    DateTime
+  person     Person   @relation(fields: [personId], references: [id])
+  billFrom   BillFrom @relation(fields: [billFromId], references: [id])
+  personName String
+  amount     Float
+  status     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  item       Item[]
+  userId     String
+  personId   String
+  billFromId String
 
+  @@index([billFromId])
   @@index([userId])
+  @@index([personId])
+}
+
+model Item {
+  id        String   @id @default(cuid())
+  name      String
+  quantity  Int
+  price     Float
+  Invoice   Invoice? @relation(fields: [invoiceId], references: [id])
+  invoiceId String?
+
+  @@index([invoiceId])
+}
+
+model BillFrom {
+  id       String @id @default(cuid())
+  address  String
+  city     String
+  postcode String
+  country  String
+
+  Invoice Invoice[]
 }
 
 // Necessary for Next auth
@@ -62,6 +90,17 @@ model User {
   accounts      Account[]
   sessions      Session[]
   invoices      Invoice[]
+}
+
+model Person {
+  id       String    @id @default(cuid())
+  name     String
+  email    String    @unique
+  address  String
+  city     String
+  postcode String
+  country  String
+  Invoice  Invoice[]
 }
 
 model VerificationToken {

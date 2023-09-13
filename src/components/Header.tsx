@@ -1,6 +1,8 @@
+import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 
 export default function Header() {
+  const session = useSession();
   return (
     <header className="flex h-[4.5rem] items-center justify-between bg-04 md:h-screen md:flex-col md:rounded-r-[20px]">
       <div className="relative flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-r-2xl bg-01 md:h-[6.4375rem] md:w-[6.4375rem]">
@@ -21,13 +23,16 @@ export default function Header() {
           height={19.9}
         />
         <div className="h-full w-[1px] bg-[#494e6e] md:h-[1px] md:w-full"></div>
-        <Image
-          alt="profile picture"
-          src="/images/image-avatar.jpg"
-          width={32}
-          height={32}
-          className="rounded-full md:w-[40px]"
-        />
+        {session.data && (
+          <Image
+            alt="profile picture"
+            src={session.data.user.image!}
+            width={32}
+            height={32}
+            className="rounded-full md:w-[40px]"
+            onClick={() => void signOut()}
+          />
+        )}
       </div>
     </header>
   );
