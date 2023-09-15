@@ -8,7 +8,7 @@ import ItemDisplay from "~/components/ItemDisplay";
 import { api } from "~/utils/api";
 import { type Item } from "@prisma/client";
 
-function calculateTotal(items: Item[]) {
+export function calculateTotal(items: Item[]) {
   let total = 0;
   for (const item of items) {
     if (total == null) {

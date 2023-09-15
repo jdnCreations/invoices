@@ -4,7 +4,7 @@ import Image from "next/image";
 export default function Header() {
   const session = useSession();
   return (
-    <header className="flex h-[4.5rem] items-center justify-between bg-04 md:h-screen md:flex-col md:rounded-r-[20px]">
+    <header className="z-20 flex h-[4.5rem] items-center justify-between bg-04 md:h-screen md:flex-col md:rounded-r-[20px]">
       <div className="relative flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-r-2xl bg-01 md:h-[6.4375rem] md:w-[6.4375rem]">
         <Image
           className="relative z-10 w-[28px] md:w-[40px]"

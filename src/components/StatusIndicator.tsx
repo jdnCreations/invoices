@@ -3,22 +3,24 @@ export default function StatusIndicator(props: { status: string }) {
   let accentBackground = "";
   let fadedBackground = "";
 
-  switch (props.status.toLowerCase()) {
-    case "paid":
-      accentText = "text-accent-green";
-      accentBackground = "bg-accent-green";
-      fadedBackground = "bg-accent-green/10";
-      break;
-    case "pending":
-      accentText = "text-accent-orange";
-      accentBackground = "bg-accent-orange";
-      fadedBackground = "bg-accent-orange/10";
-      break;
-    case "draft":
-      accentText = "text-accent-gray";
-      accentBackground = "bg-accent-gray";
-      fadedBackground = "bg-accent-gray/10";
-      break;
+  if (props.status) {
+    switch (props.status.toLowerCase()) {
+      case "paid":
+        accentText = "text-accent-green";
+        accentBackground = "bg-accent-green";
+        fadedBackground = "bg-accent-green/10";
+        break;
+      case "pending":
+        accentText = "text-accent-orange";
+        accentBackground = "bg-accent-orange";
+        fadedBackground = "bg-accent-orange/10";
+        break;
+      case "draft":
+        accentText = "text-accent-gray";
+        accentBackground = "bg-accent-gray";
+        fadedBackground = "bg-accent-gray/10";
+        break;
+    }
   }
   return (
     <div

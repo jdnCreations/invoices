@@ -37,7 +37,7 @@ export default function Invoice(props: { invoice: Invoice; person: Person }) {
         <p className="col-start-1 row-start-4 text-heading-s font-bold leading-heading-s tracking-heading-s md:col-start-4 md:row-start-1">
           {currency.format(props.invoice.amount)}
         </p>
-        <StatusIndicator invoice={props.invoice} />
+        <StatusIndicator status={props.invoice.status} />
       </div>
     </Link>
   );
