@@ -7,6 +7,8 @@ import Header from "~/components/Header";
 import PageWrapper from "~/components/PageWrapper";
 import Invoice from "~/components/Invoice";
 import FormSectionTitle from "~/components/FormSectionTitle";
+import { useState } from "react";
+import { number } from "zod";
 
 export default function Home() {
   const session = useSession();
@@ -283,62 +285,78 @@ export default function Home() {
                     <p className="pb-3 text-[18px] font-bold text-[#777F98]">
                       Item List
                     </p>
-                    <div className="flex gap-4 pb-4">
-                      <div>
-                        <label
-                          htmlFor="itemName"
-                          className="pb-8 text-body font-medium text-07"
+
+                    <div className="grid grid-cols-item-list gap-4">
+                      <label
+                        htmlFor="itemName"
+                        className="col-start-1 row-start-1 text-body font-medium text-07"
+                      >
+                        Item Name
+                      </label>
+                      <label
+                        htmlFor="quantity"
+                        className="col-start-2 row-start-1 text-body font-medium text-07"
+                      >
+                        Qty.
+                      </label>
+                      <label
+                        htmlFor="price"
+                        className="row-start-1 text-body font-medium text-07"
+                      >
+                        Price
+                      </label>
+                      <label
+                        htmlFor="total"
+                        className="row-start-1 text-body font-medium text-07"
+                      >
+                        Total
+                      </label>
+
+                      <input
+                        id="itemName"
+                        className="col-start-1 h-[48px] w-[214px] rounded border border-05 px-5 text-heading-s font-bold text-08 outline-05"
+                        type="text"
+                      />
+                      <input
+                        id="quantity"
+                        className="col-start-2 h-[48px] w-[46px] rounded border border-05 text-center text-heading-s font-bold text-08 outline-05"
+                        type="text"
+                      />
+                      <input
+                        id="price"
+                        className="col-start-3 h-[48px] w-[100px] rounded border border-05 px-5 text-heading-s font-bold text-08 outline-05"
+                        type="text"
+                      />
+                      <p className="flex h-[48px] items-center text-heading-s font-bold text-06">
+                        156.00
+                      </p>
+
+                      <button className="flex items-center justify-center">
+                        <svg
+                          width="13"
+                          height="16"
+                          xmlns="http://www.w3.org/2000/svg"
                         >
-                          Item Name
-                        </label>
-                        <input
-                          id="itemName"
-                          className="h-[48px] w-[214px] rounded border border-05 px-5 text-heading-s font-bold text-08 outline-05"
-                          type="text"
-                        />
-                      </div>
-                      <div>
-                        <div>
-                          <label
-                            htmlFor="quantity"
-                            className="pb-8 text-body font-medium text-07"
-                          >
-                            Qty.
-                          </label>
-                          <input
-                            id="quantity"
-                            className="h-[48px] w-[46px] rounded border border-05 text-center text-heading-s font-bold text-08 outline-05"
-                            type="text"
+                          <path
+                            d="M11.583 3.556v10.666c0 .982-.795 1.778-1.777 1.778H2.694a1.777 1.777 0 01-1.777-1.778V3.556h10.666zM8.473 0l.888.889h3.111v1.778H.028V.889h3.11L4.029 0h4.444z"
+                            fill="#888EB0"
+                            fillRule="nonzero"
                           />
-                        </div>
-                      </div>
-                      <div>
-                        <label
-                          htmlFor="price"
-                          className="pb-8 text-body font-medium text-07"
-                        >
-                          Price
-                        </label>
-                        <input
-                          id="price"
-                          className="h-[48px] w-[100px] rounded border border-05 px-5 text-heading-s font-bold text-08 outline-05"
-                          type="text"
-                        />
-                      </div>
-                      <div>
-                        <label
-                          htmlFor="total"
-                          className="pb-8 text-body font-medium text-07"
-                        >
-                          Total
-                        </label>
-                        <p className="flex h-[48px] items-center text-heading-s font-bold text-06">
-                          156.00
-                        </p>
-                      </div>
-                      <div className="flex h-[72px] items-center">a</div>
+                        </svg>
+                      </button>
                     </div>
-                    <button className="h-[48px] w-full rounded-3xl bg-[#f9fafe] text-heading-s font-bold text-07">
+
+                    <div className="grid-cols-[214px, 46px, 100px, 1fr, 1fr] grid gap-4 pb-4">
+                      {/* LABELS */}
+                    </div>
+                    <button
+                      className="h-[48px] w-full rounded-3xl bg-[#f9fafe] text-heading-s font-bold text-07"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setNumberOfItems(numberOfItems + 1);
+                        console.log(numberOfItems);
+                      }}
+                    >
                       + Add New Item
                     </button>
                   </div>

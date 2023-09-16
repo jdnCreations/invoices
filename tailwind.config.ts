@@ -3,7 +3,11 @@ import { type Config } from "tailwindcss";
 export default {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      gridTemplateColumns: {
+        "item-list": "214px 46px 100px 1fr 1fr",
+      },
+    },
     fontFamily: {
       spartan: "League Spartan",
     },
