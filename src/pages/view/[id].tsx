@@ -6,7 +6,9 @@ import PageWrapper from "~/components/PageWrapper";
 import StatusIndicator from "~/components/StatusIndicator";
 import ItemDisplay from "~/components/ItemDisplay";
 import { api } from "~/utils/api";
-import { type Item } from "@prisma/client";
+import { BillFrom, Invoice, Person, type Item } from "@prisma/client";
+import { useEffect, useRef, useState } from "react";
+import { init } from "next/dist/compiled/@vercel/og/satori";
 
 export function calculateTotal(items: Item[]) {
   let total = 0;
@@ -21,17 +23,37 @@ export function calculateTotal(items: Item[]) {
   return total;
 }
 
+type InvoiceData = {
+  item: Item[];
+  billFrom: BillFrom;
+  person: Person;
+  status: string;
+  dueDate: Date;
+  amount: number;
+};
+
 export default function InvoicePage() {
   const router = useRouter();
   const id = String(router.query.id);
+  const status = useRef("");
 
-  const invoice = api.invoice.getAllInvoiceDataById.useQuery(id).data;
+  const [invoiceData, setInvoiceData] = useState<InvoiceData | null>(null);
+
+  const { data: initialData } = api.invoice.getAllInvoiceDataById.useQuery(id);
+
+  useEffect(() => {
+    if (initialData) {
+      setInvoiceData(initialData);
+    }
+  }, [initialData]);
 
   let totalAmount = 0;
 
-  if (invoice) {
-    totalAmount = calculateTotal(invoice.item);
+  if (invoiceData) {
+    totalAmount = calculateTotal(invoiceData.item);
   }
+
+  const markAsPaid = api.invoice.markAsPaid.useMutation();
 
   return (
     <>
@@ -41,12 +63,14 @@ export default function InvoicePage() {
           <Link href="/" className="">
             Go Back
           </Link>
-          {invoice && (
+          {invoiceData && (
             <div className="flex flex-col gap-6">
               <div className="flex h-[5.5rem] w-[45.625rem] max-w-full items-center justify-between gap-2 rounded-[0.5rem] bg-white px-8 shadow-md">
                 <div className="flex items-center gap-5">
                   <p className="font-medium text-[#858BB2]">Status</p>
-                  <StatusIndicator key={id} status={invoice.status} />
+                  {status && (
+                    <StatusIndicator key={id} status={invoiceData.status} />
+                  )}
                 </div>
                 <div className="flex gap-2">
                   <button className="h-[3rem] min-w-[4.6rem] rounded-[1.5rem] bg-[#F9FAFE] px-6 font-bold text-07">
@@ -55,7 +79,21 @@ export default function InvoicePage() {
                   <button className="h-[3rem] min-w-[4.6rem] rounded-[1.5rem] bg-09 px-6 font-bold text-white">
                     Delete
                   </button>
-                  <button className="h-[3rem] min-w-[4.6rem] rounded-[1.5rem] bg-01 px-6 font-bold text-white">
+                  <button
+                    onClick={() => {
+                      markAsPaid.mutate(id, {
+                        onSuccess: () => {
+                          setInvoiceData((prevData) => {
+                            if (prevData) {
+                              return { ...prevData, status: "Paid" };
+                            }
+                            return prevData;
+                          });
+                        },
+                      });
+                    }}
+                    className="h-[3rem] min-w-[4.6rem] rounded-[1.5rem] bg-01 px-6 font-bold text-white"
+                  >
                     Mark as Paid
                   </button>
                 </div>
@@ -72,10 +110,10 @@ export default function InvoicePage() {
                       <p className="text-07">Project Description</p>
                     </div>
                     <div className="text-07">
-                      <p>{invoice.billFrom.address}</p>
-                      <p>{invoice.billFrom.city}</p>
-                      <p>{invoice.billFrom.postcode}</p>
-                      <p>{invoice.billFrom.country}</p>
+                      <p>{invoiceData.billFrom.address}</p>
+                      <p>{invoiceData.billFrom.city}</p>
+                      <p>{invoiceData.billFrom.postcode}</p>
+                      <p>{invoiceData.billFrom.country}</p>
                     </div>
                   </div>
                   <div className="flex justify-between pt-6">
@@ -87,23 +125,23 @@ export default function InvoicePage() {
                       <div>
                         <p className="text-07">Payment Due</p>
                         <p className="font-bold">
-                          {formatDate(invoice.dueDate)}
+                          {formatDate(invoiceData.dueDate)}
                         </p>
                       </div>
                     </div>
                     <div>
                       <p className="text-07">Bill To</p>
-                      <p className="font-bold">{invoice.person.name}</p>
+                      <p className="font-bold">{invoiceData.person.name}</p>
                       <div className="text-07">
-                        <p>{invoice.person.address}</p>
-                        <p>{invoice.person.city}</p>
-                        <p>{invoice.person.postcode}</p>
-                        <p>{invoice.person.country}</p>
+                        <p>{invoiceData.person.address}</p>
+                        <p>{invoiceData.person.city}</p>
+                        <p>{invoiceData.person.postcode}</p>
+                        <p>{invoiceData.person.country}</p>
                       </div>
                     </div>
                     <div>
                       <p className="text-07">Sent to</p>
-                      <p className="font-bold">{invoice.person.email}</p>
+                      <p className="font-bold">{invoiceData.person.email}</p>
                     </div>
                   </div>
                 </div>
@@ -116,7 +154,7 @@ export default function InvoicePage() {
                     <p className="col-start-4 text-right text-07">Price</p>
                     <p className="col-start-5 text-right text-07">Total</p>
                   </div>
-                  {invoice.item.map((item) => (
+                  {invoiceData.item.map((item: Item) => (
                     <ItemDisplay key={item.id} item={item} />
                   ))}
                 </div>

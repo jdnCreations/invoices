@@ -1,6 +1,5 @@
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Head from "next/head";
-import Link from "next/link";
 import { api } from "~/utils/api";
 import Image from "next/image";
 import Header from "~/components/Header";
@@ -8,12 +7,26 @@ import PageWrapper from "~/components/PageWrapper";
 import Invoice from "~/components/Invoice";
 import FormSectionTitle from "~/components/FormSectionTitle";
 import { useState } from "react";
-import { number } from "zod";
+import { useForm, SubmitHandler } from "react-hook-form";
+
+type Inputs = {
+  example: string;
+  exampleRequired: string;
+};
 
 export default function Home() {
   const session = useSession();
   const authenticated = session.status === "authenticated";
-  const isOpen = false;
+  let isOpen = false;
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<Inputs>();
+
+  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
 
   const currentDate = new Date().toLocaleDateString("en-au", {
     day: "2-digit",
@@ -28,6 +41,8 @@ export default function Home() {
   } else {
     userId = "";
   }
+
+  console.log(watch("example"));
 
   const { data, isLoading } = api.invoice.getAllByUser.useQuery(userId);
 
@@ -85,11 +100,15 @@ export default function Home() {
             ))}
           </main>
 
-          <div className="absolute z-0 h-full w-full bg-08/40"></div>
+          {/* <div className="absolute z-0 h-full w-full bg-08/40"></div> */}
 
-          <div className="absolute z-10 h-full w-[719px] overflow-y-auto rounded-r-[20px] bg-white">
+          <div
+            className={`${
+              isOpen ? "hidden" : "hidden"
+            } absolute z-10 h-full w-[719px] overflow-y-auto rounded-r-[20px] bg-white`}
+          >
             <div className="relative left-[103px] w-[calc(100%-103px)] px-14 pb-8 pt-14">
-              <form>
+              <form onSubmit={() => void handleSubmit(onSubmit)}>
                 <h1 className="pb-14 text-heading-m font-bold">New Invoice</h1>
                 <div className="flex flex-col gap-6 pb-12">
                   <FormSectionTitle title="Bill From" />
@@ -101,6 +120,7 @@ export default function Home() {
                       Street Address
                     </label>
                     <input
+                      {...register("example")}
                       id="address"
                       className="h-[48px] w-full rounded border border-05 px-5 text-heading-s font-bold text-08 outline-05"
                       type="text"
@@ -353,8 +373,6 @@ export default function Home() {
                       className="h-[48px] w-full rounded-3xl bg-[#f9fafe] text-heading-s font-bold text-07"
                       onClick={(e) => {
                         e.preventDefault();
-                        setNumberOfItems(numberOfItems + 1);
-                        console.log(numberOfItems);
                       }}
                     >
                       + Add New Item
@@ -362,7 +380,10 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="bottom-4 flex justify-between pt-8 text-heading-s font-bold">
-                  <button className="h-[48px] rounded-3xl bg-[#f9fafe] px-6 text-07 ">
+                  <button
+                    className="h-[48px] rounded-3xl bg-[#f9fafe] px-6 text-07"
+                    onClick={() => (isOpen = false)}
+                  >
                     Discard
                   </button>
                   <div className="flex gap-2">

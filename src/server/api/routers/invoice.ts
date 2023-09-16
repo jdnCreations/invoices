@@ -1,9 +1,5 @@
 import { z } from "zod";
-import {
-  createTRPCRouter,
-  publicProcedure,
-  protectedProcedure,
-} from "~/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 export const invoiceRouter = createTRPCRouter({
   getAll: protectedProcedure.query(({ ctx }) => {
@@ -48,5 +44,19 @@ export const invoiceRouter = createTRPCRouter({
           person: true,
         },
       });
+    }),
+
+  markAsPaid: protectedProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      const invoice = await ctx.prisma.invoice.update({
+        where: {
+          id: input,
+        },
+        data: {
+          status: "Paid",
+        },
+      });
+      return invoice;
     }),
 });
