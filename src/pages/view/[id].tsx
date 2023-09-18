@@ -8,7 +8,6 @@ import ItemDisplay from "~/components/ItemDisplay";
 import { api } from "~/utils/api";
 import { BillFrom, Invoice, Person, type Item } from "@prisma/client";
 import { useEffect, useRef, useState } from "react";
-import { init } from "next/dist/compiled/@vercel/og/satori";
 
 export function calculateTotal(items: Item[]) {
   let total = 0;
@@ -54,6 +53,7 @@ export default function InvoicePage() {
   }
 
   const markAsPaid = api.invoice.markAsPaid.useMutation();
+  const deleteInvoice = api.invoice.delete.useMutation();
 
   return (
     <>
@@ -76,26 +76,37 @@ export default function InvoicePage() {
                   <button className="h-[3rem] min-w-[4.6rem] rounded-[1.5rem] bg-[#F9FAFE] px-6 font-bold text-07">
                     Edit
                   </button>
-                  <button className="h-[3rem] min-w-[4.6rem] rounded-[1.5rem] bg-09 px-6 font-bold text-white">
-                    Delete
-                  </button>
                   <button
                     onClick={() => {
-                      markAsPaid.mutate(id, {
+                      deleteInvoice.mutate(id, {
                         onSuccess: () => {
-                          setInvoiceData((prevData) => {
-                            if (prevData) {
-                              return { ...prevData, status: "Paid" };
-                            }
-                            return prevData;
-                          });
+                          void router.push("/");
                         },
                       });
                     }}
-                    className="h-[3rem] min-w-[4.6rem] rounded-[1.5rem] bg-01 px-6 font-bold text-white"
+                    className="h-[3rem] min-w-[4.6rem] rounded-[1.5rem] bg-09 px-6 font-bold text-white"
                   >
-                    Mark as Paid
+                    Delete
                   </button>
+                  {invoiceData.status.toLowerCase() !== "paid" && (
+                    <button
+                      onClick={() => {
+                        markAsPaid.mutate(id, {
+                          onSuccess: () => {
+                            setInvoiceData((prevData) => {
+                              if (prevData) {
+                                return { ...prevData, status: "Paid" };
+                              }
+                              return prevData;
+                            });
+                          },
+                        });
+                      }}
+                      className="h-[3rem] min-w-[4.6rem] rounded-[1.5rem] bg-01 px-6 font-bold text-white"
+                    >
+                      Mark as Paid
+                    </button>
+                  )}
                 </div>
               </div>
 

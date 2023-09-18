@@ -59,4 +59,15 @@ export const invoiceRouter = createTRPCRouter({
       });
       return invoice;
     }),
+
+  delete: protectedProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      const invoice = await ctx.prisma.invoice.delete({
+        where: {
+          id: input,
+        },
+      });
+      return invoice;
+    }),
 });
